@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   mongodb:
     image: mongo:latest
@@ -8,7 +7,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password123
       MONGO_INITDB_DATABASE: nestjs_auth
-    port:
+    ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
@@ -16,14 +15,14 @@ services:
       - nestjs_network
 
   app:
-    build:
+    build: .
     container_name: nestjs_app
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://admin:password123@mongodb:27017/nestjs_auth?authSource=admin
-      - JWT_SECRET=stripe_integration_secret-key
+      - JWT_SECRET=your-super-secret-jwt-key-here
       - STRIPE_SECRET_KEY=your-stripe-secret-key
     depends_on:
       - mongodb
