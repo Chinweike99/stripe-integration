@@ -7,8 +7,8 @@ export default ()=> ({
         secret: process.env.JWT_SECRET,
         expiresIn: process.env.JWT_EXPIRES_IN || '7d',
     },
-    stripe:{
-        secretKey: process.env.STRIPE_SECRET_KEY,
-        webhookSecret: process.env.STRIPE_WEBHOOK_SECRET
-    }
+    // stripe:{
+    //     secretKey: process.env.STRIPE_SECRET_KEY,
+    //     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET
+    // }
 })

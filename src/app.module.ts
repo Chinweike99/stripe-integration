@@ -1,37 +1,49 @@
-import { Module, OnModuleInit } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
-import { InjectConnection } from '@nestjs/mongoose';
-import { Connection } from 'mongoose';
+// import { Module, OnModuleInit } from '@nestjs/common';
+// import { AppController } from './app.controller';
+// import { AppService } from './app.service';
+// import { MongooseModule } from '@nestjs/mongoose';
+// import { ConfigModule } from '@nestjs/config';
+// import { InjectConnection } from '@nestjs/mongoose';
+// import { Connection } from 'mongoose';
+
+import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import configuration from "./config/configuration.db";
+import { MongooseModule } from "@nestjs/mongoose";
+import { JwtModule } from "@nestjs/jwt";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { AuthModule } from "./auth/auth.module";
+
+
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService],
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGODB_URI as string),
+    ConfigModule.forRoot({ //ConfigModule allows you to read .env variables (like database URI or JWT secret).
+      isGlobal: true, 
+      load: [configuration]
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async(configService: ConfigService) =>( {
+        uri: configService.get<string>('database.uri')
+      }),
+      inject: [ConfigService],
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async(configService: ConfigService)=> ({
+        secret: configService.get<string>('jwt.secret'),
+        signOptions: { expiresIn: configService.get('jwt.expiresIn')}
+      }),
+      inject: [ConfigService],
+      global: true
+    }),
+    AuthModule,
+    // UsersModule
   ],
+  controllers: [AppController],
+  providers: [AppService]
 })
-export class AppModule implements OnModuleInit {
-  constructor(@InjectConnection() private connection: Connection) {}
 
-  async onModuleInit() {
-    this.connection.on('connected', () => {
-      console.log('✅ MongoDB connected successfully');
-    });
-    
-    this.connection.on('error', (err) => {
-      console.error('❌ MongoDB connection error:', err);
-    });
-
-    // Check current connection state
-    if (this.connection.readyState === 1) {
-      console.log('✅ MongoDB is connected');
-      console.log(`📊 Database: ${this.connection.name}`);
-    } else {
-      console.log('⏳ MongoDB connection state:', this.connection.readyState);
-    }
-  }
-}
+export class AppModule{}

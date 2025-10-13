@@ -5,12 +5,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class UserRpository implements IRepository<User> {
+export class UserRepository implements IRepository<User> {
     constructor(
         @InjectModel(User.name) private readonly userModel: Model<UserDocument>
     ){}
 
-    async create(entity: Partial<User>): Promise<User>{
+    async create(entity: Partial<User>): Promise<UserDocument>{
         const user = new this.userModel(entity);
         return user.save()
     }
