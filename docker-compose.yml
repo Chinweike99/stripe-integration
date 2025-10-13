@@ -18,7 +18,7 @@ services:
     build: .
     container_name: nestjs_app
     ports:
-      - "3000:3000"
+      - "4000:3000"
     environment:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://admin:password123@mongodb:27017/nestjs_auth?authSource=admin
