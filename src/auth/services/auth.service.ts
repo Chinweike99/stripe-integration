@@ -6,6 +6,7 @@ import { RegisterDto } from "../dto/registration.dto";
 import { AuthResponseDto } from "../dto/auth-response.dto";
 import { User } from "src/users/entities/user.entity";
 import { LoginDto } from "../dto/login.dto";
+import { UserService } from "src/users/services/user.service";
 
 
 
@@ -13,6 +14,7 @@ import { LoginDto } from "../dto/login.dto";
 export class AuthService {
     constructor(
         private readonly userRepository: UserRepository,
+        private readonly userService: UserService,
         private readonly passwordService: PasswordService,
         private readonly jwtService: JwtService
     ){}
@@ -27,9 +29,13 @@ export class AuthService {
 
         const hashedPassword = await this.passwordService.hashPassword(password);
 
-        const createUser = await this.userRepository.create({
+        // const createUser = await this.userRepository.create({
+        //     name, email, password: hashedPassword
+        // });
+
+        const createUser = await this.userService.createUserWithStripe({
             name, email, password: hashedPassword
-        });
+        })
 
         const tokens = await this.generateToken(createUser)
         return {
@@ -48,7 +54,8 @@ export class AuthService {
     async login(loginDto: LoginDto): Promise<AuthResponseDto>{
         const {email, password} = loginDto;
 
-        const user = await this.userRepository.findByEmail(email);
+        // const user = await this.userRepository.findByEmail(email);
+            const user = await this.userService.getUserByEmail(email);
         if (!user) {
         throw new UnauthorizedException('Invalid credentials');
         }
@@ -58,9 +65,11 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
         }
 
-        await this.userRepository.update((user as any)._id.toString(), {
-            lastLogin: new Date()
-        })
+        // await this.userRepository.update((user as any)._id.toString(), {
+        //     lastLogin: new Date()
+        // })
+        await this.userService.updateLastLogin((user as any)._id.toString());
+
 
         const tokens = await this.generateToken(user);
         return {
@@ -87,10 +96,15 @@ export class AuthService {
         const refreshToken = this.jwtService.generateRefreshToken(payload);
 
         // Store the refreshtoken in the database
-        await this.userRepository.updateRefreshToken(
-            user._id.toString(),
-            refreshToken
-        )
+        // await this.userRepository.updateRefreshToken(
+        //     user._id.toString(),
+        //     refreshToken
+        // )
+        await this.userService.updateRefreshToken(
+        user._id.toString(),
+        refreshToken,
+        );
+
         return { accessToken, refreshToken}
     }
 

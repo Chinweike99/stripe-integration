@@ -20,8 +20,8 @@ export class User {
     @Prop({default: false})
     isEmailVerified: boolean;
 
-    // @Prop()
-    // stripeCustomerId?: string;
+    @Prop()
+    stripeCustomerId?: string;
 
     @Prop()
     refreshToken?: string;
