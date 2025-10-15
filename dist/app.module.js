@@ -18,6 +18,9 @@ const jwt_1 = require("@nestjs/jwt");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const auth_module_1 = require("./auth/auth.module");
+const users_module_1 = require("./users/users.module");
+const stripe_module_1 = require("./stripe/stripe.module");
+const transactions_module_1 = require("./transactions/transactions.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -45,6 +48,9 @@ exports.AppModule = AppModule = __decorate([
                 global: true
             }),
             auth_module_1.AuthModule,
+            users_module_1.UsersModule,
+            stripe_module_1.StripeModule,
+            transactions_module_1.TransactionsModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService]

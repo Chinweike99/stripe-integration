@@ -38,12 +38,12 @@ export class TransactionService {
         }
 
         const transaction = await this.transactionRepository.create({
-            userId,
+            _id: userId,
             ...createTransactionDto,
             amount: String(createTransactionDto.amount),
             stripePaymentIntentId,
             stripeCustomerId: user.stripeCustomerId,
-            status: stripePaymentIntentId ? TransactionStatus.PENDING : TransactionStatus.COMPLETED;
+            status: stripePaymentIntentId ? TransactionStatus.PENDING : TransactionStatus.COMPLETED
         })
         return transaction;
     }

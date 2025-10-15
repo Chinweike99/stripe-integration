@@ -20,7 +20,7 @@ export enum TransactionType {
 @Schema({ timestamps: true})
 export class Transaction {
     @Prop({required: true, type: MongooseSchema.Types.ObjectId, ref: 'User'})
-    userId: string;
+    _id: string;
 
     @Prop({required: true})
     amount: string;
@@ -43,8 +43,8 @@ export class Transaction {
     @Prop()
     stripeCustomerId?: string;
 
-    @Prop()
-    metadata?: any;
+    @Prop({ type: MongooseSchema.Types.Mixed })
+    metadata?: Record<string, any>;
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction)
