@@ -56,4 +56,67 @@ export class StripeService implements OnModuleInit{
             cancel_url: cancelUrl
         })
     }
+
+    async createSubscription(customerId: string, priceId: string){
+        return await this.stripe.subscriptions.create({
+            customer: customerId,
+            items: [{price: priceId}],
+            payment_behavior: 'default_incomplete',
+            payment_settings: {save_default_payment_method: 'on_subscription'},
+            expand: ['latest_invoice.payment_intent']
+        })
+    }
+
+    async cancelSubscription(subscriptionId: string){
+        return await this.stripe.subscriptions.cancel(subscriptionId)
+    }
+
+      async retrieveSubscription(subscriptionId: string) {
+    return await this.stripe.subscriptions.retrieve(subscriptionId);
+  }
+
+    async updateSubscription(subscriptionId: string, items: Array<{price: string}>){
+        return await this.stripe.subscriptions.update(subscriptionId, {items})
+    }
+
+    async listSubscriptions(customerId: string){
+        return await this.stripe.subscriptions.list({
+            customer: customerId, status: 'all'
+        })
+     }
+
+     async createProduct(name: string, description?: string){
+        return await this.stripe.products.create({
+            name, description
+        })
+     }
+
+     async createPrice(
+    productId: string,
+    unitAmount: number,
+    currency: string,
+    interval: 'month' | 'year' | 'week' | 'day' = 'month',
+  ) {
+    return await this.stripe.prices.create({
+      product: productId,
+      unit_amount: unitAmount,
+      currency,
+      recurring: {
+        interval,
+      },
+    });
+  }
+
+    async listProducts(active = true) {
+    return await this.stripe.products.list({
+      active,
+    });
+  }
+
+  async listPrices(active = true) {
+    return await this.stripe.prices.list({
+      active,
+    });
+  }
+
 }
