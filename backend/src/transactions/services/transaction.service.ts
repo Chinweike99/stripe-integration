@@ -38,7 +38,7 @@ export class TransactionService {
         }
 
         const transaction = await this.transactionRepository.create({
-            _id: userId,
+            userId,
             ...createTransactionDto,
             amount: String(createTransactionDto.amount),
             stripePaymentIntentId,

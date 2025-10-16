@@ -19,8 +19,11 @@ export enum TransactionType {
 
 @Schema({ timestamps: true})
 export class Transaction {
-    @Prop({required: true, type: MongooseSchema.Types.ObjectId, ref: 'User'})
+    @Prop({ type: MongooseSchema.Types.ObjectId, auto: true })
     _id: string;
+
+    @Prop({required: true, type: MongooseSchema.Types.ObjectId, ref: 'User'})
+    userId: string;
 
     @Prop({required: true})
     amount: string;
