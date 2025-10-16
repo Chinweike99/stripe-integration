@@ -5,6 +5,7 @@ import { TransactionsModule } from "src/transactions/transactions.module";
 import { StripeService } from "./services/stripe.service";
 import { StripeController } from "./controllers/stripe.controller";
 import { SubscriptionsModule } from "src/subscriptions/subscriptions.module";
+import { ProductSetupService } from "./services/product-setup.service";
 
 
 @Module({
@@ -14,7 +15,7 @@ import { SubscriptionsModule } from "src/subscriptions/subscriptions.module";
     forwardRef(() => TransactionsModule),
     forwardRef(()=> SubscriptionsModule),
   ],
-  providers: [StripeService],
+  providers: [StripeService, ProductSetupService],
   controllers: [StripeController],
   exports: [StripeService],
 })

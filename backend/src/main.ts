@@ -3,6 +3,7 @@ import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { json, urlencoded, raw } from "express"; 
+import cors from 'cors';
 
 async function main() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,13 @@ async function main() {
   // For all other routes, use normal body parsers
   app.use(json());
   app.use(urlencoded({ extended: true }));
+  app.use(
+  cors({
+    origin: ['http://localhost:4000', 'http://localhost:3000', 'http://localhost:3001' ], 
+    credentials: true
+  })
+);
+
 
   // Global validation
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
