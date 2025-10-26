@@ -154,15 +154,17 @@ ZIP: Any 5 digits
 
 ## Payment Flow Demonstration
 
-![Stripe Checkout Interface](/images/checkout.png)
+## Payment Flow Demonstration
 
-![Stripe Payment Confirmation](/images/stripepaysuccess.png)
+![Stripe Checkout Interface](./images/checkout.png)
 
-![Application Success Notification](/images/stripepaysuccss.png)
+![Stripe Payment Confirmation](./images/stripepaysuccess.png)
 
-![Stripe Dashboard - Transactions View](/images/stripeTransactions.png)
+![Application Success Notification](./images/stripepaysuccss.png)
 
-![Stripe Webhook Setup](/images/stripewebhook.png)
+![Stripe Dashboard - Transactions View](./images/stripeTransactions.png)
+
+![Stripe Webhook Setup](./images/stripewebhook.png)
 
 
 
