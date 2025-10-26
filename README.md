@@ -154,8 +154,6 @@ ZIP: Any 5 digits
 
 ## Payment Flow Demonstration
 
-## Payment Flow Demonstration
-
 ![Stripe Checkout Interface](./images/checkout.png)
 
 ![Stripe Payment Confirmation](./images/stripepaysuccess.png)
