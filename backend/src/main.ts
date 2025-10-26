@@ -14,8 +14,6 @@ async function main() {
     next();
   });
 
-
-  // For all other routes, use normal body parsers
   app.use(json());
   app.use(urlencoded({ extended: true }));
   app.use(
@@ -29,7 +27,6 @@ async function main() {
   // Global validation
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  // Swagger configuration
   const config = new DocumentBuilder()
     .setTitle("NestJs Stripe Auth API")
     .setDescription("Authentication system with stripe integration")

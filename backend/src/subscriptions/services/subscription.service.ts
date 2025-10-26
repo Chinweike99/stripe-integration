@@ -127,4 +127,34 @@ export class SubscriptionService {
         return productsWithPrices
     }
 
+async createSubscriptionFromWebhook(userId: string, stripeSubscription: any) {
+  const user = await this.userRepository.findById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Check if subscription already exists
+  const existingSubscription = await this.subscriptionRepository.findByStripeSubscriptionId(
+    stripeSubscription.id,
+  );
+
+  if (existingSubscription) {
+    return existingSubscription;
+  }
+
+  // Create new subscription
+  const subscription = await this.subscriptionRepository.create({
+    userId,
+    stripeSubscriptionId: stripeSubscription.id,
+    stripeCustomerId: stripeSubscription.customer,
+    stripePriceId: stripeSubscription.items.data[0].price.id,
+    status: stripeSubscription.status as SubscriptionStatus,
+    currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
+    currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+    cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+  });
+
+  return subscription;
+}
+
 }

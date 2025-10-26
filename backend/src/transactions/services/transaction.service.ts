@@ -71,7 +71,6 @@ export class TransactionService {
     if (!transaction) {
       throw new NotFoundException('Transaction not found');
     }
-
     return transaction;
   }
 
@@ -82,4 +81,38 @@ export class TransactionService {
     }
     return null;
   }
+
+  // Add this method to the TransactionService class
+async createTransactionFromWebhook(userId: string, paymentIntent: any, metadata: any) {
+  const user = await this.userRepository.findById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Check if transaction already exists
+  const existingTransaction = await this.transactionRepository.findByStripePaymentIntent(
+    paymentIntent.id,
+  );
+
+  if (existingTransaction) {
+    return existingTransaction;
+  }
+
+  // Create new transaction
+  const transaction = await this.transactionRepository.create({
+    userId,
+    amount: (paymentIntent.amount / 100).toString(), // Convert from cents
+    currency: paymentIntent.currency,
+    description: metadata.description || 'Payment',
+    type: TransactionType.PAYMENT,
+    status: paymentIntent.status === 'succeeded' ? TransactionStatus.COMPLETED : TransactionStatus.PENDING,
+    stripePaymentIntentId: paymentIntent.id,
+    stripeCustomerId: paymentIntent.customer,
+    metadata,
+  });
+
+  return transaction;
+}
+
+
 }

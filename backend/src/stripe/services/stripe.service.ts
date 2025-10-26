@@ -44,8 +44,7 @@ export class StripeService implements OnModuleInit{
     }
 
     async createCheckoutSession(
-        customerId: string, priceId: string, successUrl: string, cancelUrl: string
-    ){
+customerId: string, priceId: string, successUrl: string, cancelUrl: string, p0: { userId: any; type: string; }    ){
         return await this.stripe.checkout.sessions.create({
             customer: customerId, 
             line_items:[
@@ -118,5 +117,47 @@ export class StripeService implements OnModuleInit{
       active,
     });
   }
+
+   async createPaymentCheckoutSession(
+    customerId: string,
+    amount: number,
+    currency: string,
+    successUrl: string,
+    cancelUrl: string,
+    metadata: any = {},
+  ) {
+    return await this.stripe.checkout.sessions.create({
+      customer: customerId,
+      line_items: [
+        {
+          price_data: {
+            currency,
+            product_data: {
+              name: 'One-time Payment',
+              description: metadata.description || 'Payment for services',
+            },
+            unit_amount: Math.round(amount * 100), // Convert to cents
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata,
+    });
+  }
+
+  async retrieveCheckoutSession(sessionId: string) {
+    return await this.stripe.checkout.sessions.retrieve(sessionId);
+  }
+
+    async createPortalSession(customerId: string, returnUrl: string) {
+    return await this.stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: returnUrl,
+    });
+  }
+
 
 }

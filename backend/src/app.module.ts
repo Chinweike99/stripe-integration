@@ -1,11 +1,3 @@
-// import { Module, OnModuleInit } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-// import { MongooseModule } from '@nestjs/mongoose';
-// import { ConfigModule } from '@nestjs/config';
-// import { InjectConnection } from '@nestjs/mongoose';
-// import { Connection } from 'mongoose';
-
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import configuration from "./config/configuration.db";
