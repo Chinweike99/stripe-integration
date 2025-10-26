@@ -152,16 +152,17 @@ CVC: Any 3 digits
 ZIP: Any 5 digits
 ```
 
-## Transaction Success
+## Payment Flow Demonstration
 
-![Stripe Checkout page](./images/checkout.png)
+![Stripe Checkout Interface](./images/checkout.png)
 
-![Stripe Success page](./images/stripepaysuccess.png)
-![Stripe Success page](./images/stripepaysuccss.png)
+![Stripe Payment Confirmation](./images/stripepaysuccess.png)
 
-![Stripe transactions table on stripe account](./images/stripepaysuccss.png)
+![Application Success Notification](./images/stripepaysuccss.png)
 
-![Stripe webhook](./images/stripewebhook.png)
+![Stripe Dashboard - Transactions View](./images/stripe-transactions-dashboard.png)
+
+![Stripe Webhook Setup](./images/stripewebhook.png)
 
 
 
